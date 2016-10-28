@@ -3,7 +3,7 @@ from tkinter import *
 from math import *
 
 RATE = 1000
-SIZE = 800, 800
+SIZE = 800, 600
 
 
 def updateTask(root, canvas):
@@ -12,6 +12,7 @@ def updateTask(root, canvas):
     print(t)
     canvas.create_oval(25, 25, 80, 60, width=2, fill='')
     canvas.create_line(0, 0, 200, 200, width=5, fill='black')
+    canvas.create_oval(25, 25, 200, 200, width=2, fill='')
     root.after(RATE, updateTask, root, canvas)
 
 
