@@ -10,14 +10,17 @@ sizeSmallTick = radius * 9/10
 sizeHourPoint = radius * 6/10
 sizeMinutesPoint = radius * 9/10
 sizeSecondsPoint = radius
+backgroundColor = '#FFF'
+watchColor = '#FFF'
 
 def updateTask(root, canvas):
     canvas.delete(ALL)
-#    canvas.create_text(0,centrum [1]-radius,centrum [0]+radius,centrum [1]+radius,'Claus Huynh', fill='')
     t = datetime.datetime.now()
-    print(t)
+    tNow = str(t.hour) + ':' + str(t.minute) + ':' +str(t.second)
+    canvas.create_rectangle(centrum [0]-radius, 0,centrum [0]+radius, centrum [1]-radius-10, fill='black')
+    canvas.create_text(centrum [0]-radius, 0, font=('',65), text=tNow, anchor='nw', fill='#00ABD3')
+    canvas.create_oval(centrum [0]-radius, centrum [1]-radius, centrum [0]+radius, centrum [1]+radius, width=2, fill=watchColor)
     drawTicks(canvas)
-    canvas.create_oval(centrum [0]-radius, centrum [1]-radius, centrum [0]+radius, centrum [1]+radius, width=2, fill='')
     root.after(RATE, updateTask, root, canvas)
     pointer(canvas, t)
 
@@ -26,7 +29,7 @@ def main():
     root = Tk()
     root.title("Min applikation")
     root.geometry(str(SIZE[0]) + 'x' + str(SIZE[1]))
-    canvas = Canvas(width=SIZE[0], height=SIZE[1], bg='white')
+    canvas = Canvas(width=SIZE[0], height=SIZE[1], bg=backgroundColor)
     canvas.pack(expand=YES, fill=BOTH)
     updateTask(root, canvas)
     root.mainloop()
@@ -68,6 +71,6 @@ def pointer(canvas, t):
     rad = sec*(1 / 60)*2*pi-1/2*pi
     x = cos(rad) * sizeSecondsPoint
     y = sin(rad) * sizeSecondsPoint
-    canvas.create_line(centrum [0], centrum [1], x+centrum[0], y+centrum[1], width=2, fill='black')
+    canvas.create_line(centrum [0], centrum [1], x+centrum[0], y+centrum[1], width=2, fill='red')
 
 main()
