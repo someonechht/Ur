@@ -7,12 +7,13 @@ centrum = SIZE [0]/2, SIZE [1]/2
 radius = 200
 sizeBigTick = radius * 4/5
 sizeSmallTick = radius * 9/10
-sizeHourPoint = radius * 7/10
-sizeMinutesPoint = radius * 6/10
+sizeHourPoint = radius * 6/10
+sizeMinutesPoint = radius * 9/10
 sizeSecondsPoint = radius
 
 def updateTask(root, canvas):
     canvas.delete(ALL)
+#    canvas.create_text(0,centrum [1]-radius,centrum [0]+radius,centrum [1]+radius,'Claus Huynh', fill='')
     t = datetime.datetime.now()
     print(t)
     drawTicks(canvas)
@@ -52,19 +53,19 @@ def drawTicks(canvas):
 def pointer(canvas, t):
 
     klok=t.hour
-    rad = klok*(1/12)*2*pi
+    rad = klok*(1/12)*2*pi-1/2*pi
     x = cos(rad)* sizeHourPoint
     y = sin(rad)* sizeHourPoint
     canvas.create_line(centrum [0], centrum [1], x+centrum[0], y+centrum[1], width=10, fill='black')
 
     minu = t.minute
-    rad = minu * (1 / 60) * 2 * pi
+    rad = minu * (1 / 60) * 2 * pi-1/2*pi
     x = cos(rad) * sizeMinutesPoint
     y = sin(rad) * sizeMinutesPoint
     canvas.create_line(centrum[0], centrum[1], x + centrum[0], y + centrum[1], width=4, fill='black')
 
     sec = t.second
-    rad = sec*(1/60)*2*pi
+    rad = sec*(1 / 60)*2*pi-1/2*pi
     x = cos(rad) * sizeSecondsPoint
     y = sin(rad) * sizeSecondsPoint
     canvas.create_line(centrum [0], centrum [1], x+centrum[0], y+centrum[1], width=2, fill='black')
