@@ -8,9 +8,9 @@ SIZE = 800, 600
 def updateTask(root, canvas):
     canvas.delete(ALL)
     t = datetime.datetime.now()
-    print(t)
-    canvas.create_oval(25, 25, 80, 60, width=2, fill='')
-    canvas.create_line(25, 25, 80, 60, width=5, fill='black')
+    #print(t)
+    canvas.create_oval(0, 0, 80, 80, width=2, fill='')
+    canvas.create_line(0, 0, 40, 40, width=5, fill='black')
     root.after(RATE, updateTask, root, canvas)
 
 
