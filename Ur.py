@@ -52,7 +52,6 @@ def drawTicks(canvas):
 def pointer(canvas, t):
 
     klok=t.hour
-
     rad = klok*(1/12)*2*pi
     x = cos(rad)* sizeHourPoint
     y = sin(rad)* sizeHourPoint
@@ -64,7 +63,7 @@ def pointer(canvas, t):
     y = sin(rad) * sizeMinutesPoint
     canvas.create_line(centrum[0], centrum[1], x + centrum[0], y + centrum[1], width=4, fill='black')
 
-    sec=t.second
+    sec = t.second
     rad = sec*(1/60)*2*pi
     x = cos(rad) * sizeSecondsPoint
     y = sin(rad) * sizeSecondsPoint
