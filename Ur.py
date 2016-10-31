@@ -5,7 +5,11 @@ RATE = 1000
 SIZE = 800, 600
 centrum = SIZE [0]/2, SIZE [1]/2
 radius = 200
-sizeBigTick = radius * 1/5
+sizeBigTick = radius * 4/5
+sizeSmallTick = radius * 9/10
+sizeHourPoint = radius * 7/10
+sizeMinutesPoint = radius * 6/10
+sizeSecondsPoint = radius
 
 def updateTask(root, canvas):
     canvas.delete(ALL)
@@ -29,25 +33,41 @@ def main():
 def drawTicks(canvas):
     for h in range(1, 13):
         p = h/12
-        rad = p * 2*pi
-        x=200 * cos(rad)
-        y=200 * sin(rad)
+        rad = p * 2 * pi
+        x=radius * cos(rad)
+        y=radius * sin(rad)
         subtX= sizeBigTick * cos(rad)
-        subtY= sizeBigTick * cos(rad)
-        canvas.create_line(centrum [0]-subtX, centrum [1]-subtY, x+centrum[0], y+centrum[1], width=5, fill='black')
+        subtY= sizeBigTick * sin(rad)
+        canvas.create_line(centrum[0] + subtX,centrum [1] + subtY, x + centrum[0], y + centrum[1], width=8, fill='black')
+
+    for s in range(1, 61):
+        p = s/60
+        rad = p * 2 * pi
+        x=radius * cos(rad)
+        y=radius * sin(rad)
+        subtX= sizeSmallTick * cos(rad)
+        subtY= sizeSmallTick * sin(rad)
+        canvas.create_line(centrum[0] + subtX,centrum [1] + subtY, x + centrum[0], y + centrum[1], width=1, fill='black')
 
 def pointer(canvas, t):
 
     klok=t.hour
 
     rad = klok*(1/12)*2*pi
-    x=200 * cos(rad)
-    y=200 * sin(rad)
-    canvas.create_line(centrum [0], centrum [1], x+centrum[0], y+centrum[1], width=20, fill='black')
+    x = cos(rad)* sizeHourPoint
+    y = sin(rad)* sizeHourPoint
+    canvas.create_line(centrum [0], centrum [1], x+centrum[0], y+centrum[1], width=10, fill='black')
 
+    minu = t.minute
+    rad = minu * (1 / 60) * 2 * pi
+    x = cos(rad) * sizeMinutesPoint
+    y = sin(rad) * sizeMinutesPoint
+    canvas.create_line(centrum[0], centrum[1], x + centrum[0], y + centrum[1], width=4, fill='black')
 
-
-
-
+    sec=t.second
+    rad = sec*(1/60)*2*pi
+    x = cos(rad) * sizeSecondsPoint
+    y = sin(rad) * sizeSecondsPoint
+    canvas.create_line(centrum [0], centrum [1], x+centrum[0], y+centrum[1], width=2, fill='black')
 
 main()
