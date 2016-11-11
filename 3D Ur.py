@@ -1,3 +1,18 @@
+# http://stackoverflow.com/questions/6139451/how-can-i-convert-3d-space-coordinates-to-2d-space-coordinates
+# https://matb1htx.systime.dk/?id=c891
+#(q,w,e,r) 4D
+#(x,y,z) 3D
+#(u,v) 2D
+
+#fra 3D til 2D
+#u = x / z;
+#v = y / z;
+
+#fra 4D til 3D
+#x=q/r
+#y=w/r
+#z=e/r
+
 import datetime
 from tkinter import *
 from math import *
