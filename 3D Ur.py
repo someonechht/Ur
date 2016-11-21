@@ -28,6 +28,7 @@ sizeMinutesPoint = radius*  3/4
 sizeSecondsPoint = radius/2
 backgroundColor = '#FFF'
 watchColor = '#FFF'
+widtht = radius*2
 
 def updateTask(root, canvas):
     canvas.delete(ALL)
@@ -39,6 +40,7 @@ def updateTask(root, canvas):
     drawMinDisc(canvas, t)
     root.after(1000 - t.microsecond // 1000, updateTask, root, canvas)
     pointer(canvas, t)
+    drawDaOval(canvas, t)
 
 def convertDimension(q, w, e, r):
     x=q/r
@@ -47,6 +49,19 @@ def convertDimension(q, w, e, r):
     u = x / z
     v = y / z
     return u, v
+
+def drawDaOval(canvas, t):
+    global widtht
+    sec = t.second
+    rad = sec*(1 / 60)*2*pi-1/2*pi
+
+    60/(2*pi)
+    widtht = cos(rad)*200
+    z = sin(rad)
+
+
+
+
 
 def main():
     root = Tk()
@@ -62,7 +77,7 @@ def pointer(canvas, t):
 
 def drawSecDisc(canvas, t):
     sec = t.second
-    canvas.create_oval(centrum[0] - radius, centrum[1] - radius, centrum[0] + radius, centrum[1] + radius, width=2)
+    canvas.create_oval(centrum[0]-widtht , centrum[1] - radius, centrum[0] + widtht, centrum[1] + radius, width=2)
     for h in range(1, 13):
         rotation = sec/60*2*pi
         p = h/12
