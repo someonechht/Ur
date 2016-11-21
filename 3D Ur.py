@@ -4,7 +4,7 @@
 # (q,w,e,r) 4D
 # (x,y,z) 3D
 # (u,v) 2D
-#
+
 # fra 3D til 2D
 # u = x / z;
 # v = y / z;
@@ -22,26 +22,26 @@ SIZE = 800, 600
 centrum = SIZE[0]/2, SIZE[1]/2
 radius = 200
 sizeBigTick = radius * 4/5
-sizeSmallTick = radius * 9/10
+sizeSmallTick = 9/10
 sizeHourPoint = radius * 1/2
 sizeMinutesPoint = radius*  3/4
-sizeSecondsPoint = radius/2
+sizeSecondsPoint = 3/4
 backgroundColor = '#FFF'
 watchColor = '#FFF'
-widtht = radius*2
 
 def updateTask(root, canvas):
     canvas.delete(ALL)
     t = datetime.datetime.now()
     tNow = str(t.hour) + ':' + str(t.minute) + ':' +str(t.second)
-    print(t)
-    drawDigitalWatch(canvas, t)
-    drawSecDisc(canvas, t)
-    drawMinDisc(canvas, t)
-    root.after(1000 - t.microsecond // 1000, updateTask, root, canvas)
-    pointer(canvas, t)
-    drawDaOval(canvas, t)
+    secRotation = cos(t.second*(1 / 60) * 2 * pi - 1 / 2 * pi)*radius
+    minRotation = sin(t.second*(1 / 60) * 2 * pi - 1 / 2 * pi)*radius
 
+    drawDigitalWatch(canvas, t)
+    drawSecDisc(canvas, t, secRotation)
+    drawMinDisc(canvas, t, minRotation)
+    pointer(canvas, t)
+
+    root.after(RATE - t.microsecond // 1000, updateTask, root, canvas)
 def convertDimension(q, w, e, r):
     x=q/r
     y=w/r
@@ -49,19 +49,6 @@ def convertDimension(q, w, e, r):
     u = x / z
     v = y / z
     return u, v
-
-def drawDaOval(canvas, t):
-    global widtht
-    sec = t.second
-    rad = sec*(1 / 60)*2*pi-1/2*pi
-
-    60/(2*pi)
-    widtht = cos(rad)*200
-    z = sin(rad)
-
-
-
-
 
 def main():
     root = Tk()
@@ -75,63 +62,43 @@ def main():
 def pointer(canvas, t):
     canvas.create_line(centrum [0], centrum [1], centrum[0], centrum[1]-radius, width=2, fill='red')
 
-def drawSecDisc(canvas, t):
+def drawSecDisc(canvas, t, secRotation):
     sec = t.second
-    canvas.create_oval(centrum[0]-widtht , centrum[1] - radius, centrum[0] + widtht, centrum[1] + radius, width=2)
+    canvas.create_oval(centrum[0] - secRotation, centrum[1] - radius, centrum[0] + secRotation, centrum[1] + radius, width=2)
+
     for h in range(1, 13):
         rotation = sec/60*2*pi
         p = h/12
         rad = p * 2 * pi+rotation
-        x=radius * cos(rad)
+        x= secRotation * cos(rad)
         y=radius * sin(rad)
-        subtX= sizeSecondsPoint * cos(rad)
-        subtY= sizeSecondsPoint * sin(rad)
-        canvas.create_line(centrum[0] + subtX,centrum [1] + subtY, x + centrum[0], y + centrum[1], width=1, fill='black')
+        canvas.create_line(centrum[0]+sizeSecondsPoint*x, centrum [1]+sizeSecondsPoint*y, x + centrum[0], y + centrum[1], width=1)
 
-    for s in range(1, 61):
-        p = s/60
-        rad = p * 2 * pi
-        x=radius * cos(rad)
-        y=radius * sin(rad)
-        z=radius * (rad)
-        subtX= (sizeSmallTick * cos(rad))
-        subtY= (sizeSmallTick * sin(rad))
-        canvas.create_line(centrum[0] + subtX,centrum [1] + subtY, x + centrum[0], y + centrum[1], width=1, fill='black')
-
-def drawMinDisc(canvas, t):
-    minu = t.minute
-    canvas.create_oval(centrum[0] - radius, centrum[1] - radius, centrum[0] + radius, centrum[1] + radius, width=2)
     for i in range(1, 61):
-        rotation = minu / 60 * 2 * pi
-        p = i / 12
-        rad = p * 2 * pi + rotation
-        etE = 1
-        etW = radius * sin(rad)
-        etQ = radius * cos(rad)
-        etR = 1
-        u = convertDimension(etQ, etW, etE, etR)[0]
-        v = convertDimension(etQ, etW, etE, etR)[1]
-
-        tickX = sizeMinutesPoint * cos(rad)
-        tickY = sizeMinutesPoint * sin(rad)
-
-        canvas.create_line(centrum[0] + tickX, centrum[1] + tickY, u + centrum[0], v + centrum[1], width=4, fill='black')
-
-    for j in range(1, 61):
-        p = j/60
+        p = i/60
         rad = p * 2 * pi
+        x= secRotation * cos(rad)
+        y=radius * sin(rad)
+        canvas.create_line(centrum[0]+sizeSmallTick*x, centrum [1]+sizeSmallTick*y, x + centrum[0], y + centrum[1], width=1)
 
-        etQ=radius * cos(rad)
-        etW=radius * sin(rad)
-        eqE=radius * (rad)
-        etR=1
+def drawMinDisc(canvas, t, minRotation):
+    min = t.minute
+    canvas.create_oval(centrum[0] - minRotation, centrum[1] - radius, centrum[0] + minRotation, centrum[1] + radius, width=4)
 
-        u = convertDimension(etQ, etW, etE, etR)[0]
-        v = convertDimension(etQ, etW, etE, etR)[1]
+    for h in range(1, 13):
+        rotation = min/60*2*pi
+        p = h/12
+        rad = p * 2 * pi+rotation
+        x=minRotation * cos(rad)
+        y=radius * sin(rad)
+        canvas.create_line(centrum[0]+sizeSecondsPoint*x, centrum [1]+sizeSecondsPoint*y, x + centrum[0], y + centrum[1], width=2)
 
-        subtX= (sizeSmallTick * cos(rad))
-        subtY= (sizeSmallTick * sin(rad))
-        canvas.create_line(centrum[0] + subtX,centrum [1] + subtY, u + centrum[0], v + centrum[1], width=2, fill='black')
+    for i in range(1, 61):
+        p = i/60
+        rad = p * 2 * pi
+        x=minRotation * cos(rad)
+        y=radius * sin(rad)
+        canvas.create_line(centrum[0]+sizeSmallTick*x, centrum [1]+sizeSmallTick*y, x + centrum[0], y + centrum[1], width=2)
 
 def drawDigitalWatch(canvas, t):
     tNow = t.strftime("%H:%M:%S")
