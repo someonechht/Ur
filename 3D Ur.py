@@ -4,7 +4,7 @@
 # (q,w,e,r) 4D
 # (x,y,z) 3D
 # (u,v) 2D
-
+#
 # fra 3D til 2D
 # u = x / z;
 # v = y / z;
