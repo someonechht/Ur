@@ -3,7 +3,7 @@ from tkinter import *
 from math import *
 RATE = 1000
 SIZE = 800, 600
-centrum = SIZE [0]/2, SIZE [1]/2
+centrum = SIZE[0]/2, SIZE[1]/2
 radius = 200
 sizeBigTick = radius * 4/5
 sizeSmallTick = radius * 9/10
