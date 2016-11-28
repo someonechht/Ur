@@ -33,16 +33,18 @@ def updateTask(root, canvas):
     canvas.delete(ALL)
     t = datetime.datetime.now()
     tNow = str(t.hour) + ':' + str(t.minute) + ':' +str(t.second)
-    secRotation = cos(t.second*(1 / 60) * 2 * pi - 1 / 2 * pi)*radius
-    minRotation = sin(t.second*(1 / 60) * 2 * pi - 1 / 2 * pi)*radius
+    secRotation = cos((t.second + t.microsecond / 1000000)*(1 / 60) * 2 * pi - 1 / 2 * pi) * radius
+    minRotation = sin((t.second + t.microsecond / 1000000)*(1 / 60) * 2 * pi - 1 / 2 * pi) * radius
+    hourRotation = sin((t.second + t.microsecond / 1000000) * (1 / 60) * 2 * pi - 1 / 2 * pi) * radius
 
     drawDigitalWatch(canvas, t)
     drawSecDisc(canvas, t, secRotation)
     drawMinDisc(canvas, t, minRotation)
-    pointer(canvas, t)
+    drawHourDisc(canvas, t, hourRotation)
+    pointer(canvas)
 
-    root.after(RATE - t.microsecond // 1000, updateTask, root, canvas)
-def convertDimension(q, w, e, r):
+    root.after(100 - t.microsecond // 10000, updateTask, root, canvas)
+def convertDimension(q,w,e,r):
     x=q/r
     y=w/r
     z=e/r
@@ -59,7 +61,7 @@ def main():
     updateTask(root, canvas)
     root.mainloop()
 
-def pointer(canvas, t):
+def pointer(canvas):
     canvas.create_line(centrum [0], centrum [1], centrum[0], centrum[1]-radius, width=2, fill='red')
 
 def drawSecDisc(canvas, t, secRotation):
@@ -97,6 +99,25 @@ def drawMinDisc(canvas, t, minRotation):
         p = i/60
         rad = p * 2 * pi
         x=minRotation * cos(rad)
+        y=radius * sin(rad)
+        canvas.create_line(centrum[0]+sizeSmallTick*x, centrum [1]+sizeSmallTick*y, x + centrum[0], y + centrum[1], width=2)
+
+def drawHourDisc(canvas, t, hourRotation):
+    hour = t.hour
+    canvas.create_oval(centrum[0] - hourRotation, centrum[1] - radius, centrum[0] + hourRotation, centrum[1] + radius, width=4)
+
+    for h in range(1, 13):
+        rotation = hour/60*2*pi
+        p = h/12
+        rad = p * 2 * pi+rotation
+        x= hourRotation * cos(rad)
+        y = radius * sin(rad)
+        canvas.create_line(centrum[0]+sizeHourPoint*x, centrum [1]+sizeHourPoint*y, x + centrum[0], y + centrum[1], width=2)
+
+    for i in range(1, 61):
+        p = i/60
+        rad = p * 2 * pi
+        x= hourRotation * cos(rad)
         y=radius * sin(rad)
         canvas.create_line(centrum[0]+sizeSmallTick*x, centrum [1]+sizeSmallTick*y, x + centrum[0], y + centrum[1], width=2)
 
