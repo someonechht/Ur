@@ -35,7 +35,7 @@ def updateTask(root, canvas):
     tNow = str(t.hour) + ':' + str(t.minute) + ':' +str(t.second)
     secRotation = cos((t.second + t.microsecond / 1000000)*(1 / 60) * 2 * pi - 1 / 2 * pi) * radius
     minRotation = sin((t.second + t.microsecond / 1000000)*(1 / 60) * 2 * pi - 1 / 2 * pi) * radius
-    hourRotation = sin((t.second + t.microsecond / 1000000) * (1 / 60) * 2 * pi - 1 / 2 * pi) * radius
+    hourRotation = tan((t.second + t.microsecond / 1000000) * (1 / 60) * 2 * pi - 1 / 2 * pi) * radius
 
     drawDigitalWatch(canvas, t)
     drawSecDisc(canvas, t, secRotation)
@@ -103,7 +103,7 @@ def drawMinDisc(canvas, t, minRotation):
         canvas.create_line(centrum[0]+sizeSmallTick*x, centrum [1]+sizeSmallTick*y, x + centrum[0], y + centrum[1], width=2)
 
 def drawHourDisc(canvas, t, hourRotation):
-    hour = t.hour
+    hour = t.second
     canvas.create_oval(centrum[0] - hourRotation, centrum[1] - radius, centrum[0] + hourRotation, centrum[1] + radius, width=4)
 
     for h in range(1, 13):
@@ -112,7 +112,7 @@ def drawHourDisc(canvas, t, hourRotation):
         rad = p * 2 * pi+rotation
         x= hourRotation * cos(rad)
         y = radius * sin(rad)
-        canvas.create_line(centrum[0]+sizeHourPoint*x, centrum [1]+sizeHourPoint*y, x + centrum[0], y + centrum[1], width=2)
+        canvas.create_line(centrum[0]+sizeSecondsPoint*x, centrum [1]+sizeSecondsPoint*y, x + centrum[0], y + centrum[1], width=2)
 
     for i in range(1, 61):
         p = i/60
