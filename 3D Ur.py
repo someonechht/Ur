@@ -1,4 +1,3 @@
-# asdf
 # http://stackoverflow.com/questions/6139451/how-can-i-convert-3d-space-coordinates-to-2d-space-coordinates
 # https://matb1htx.systime.dk/?id=c891
 # (q,w,e,r) 4D
