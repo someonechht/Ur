@@ -28,16 +28,19 @@ sizeSecondsPoint = 3/4
 backgroundColor = '#FFF'
 watchColor = '#FFF'
 hourText = 0
+secDiscRadius = radius*(1/2)
+minDiscRadius = radius*(3/4)
+hourDiscRadius = radius
 
 def updateTask(root, canvas):
     canvas.delete(ALL)
     t = datetime.datetime.now()
     tNow = str(t.hour) + ':' + str(t.minute) + ':' +str(t.second)
-    secRotation = cos((t.second + t.microsecond / 1000000)*(1 / 60) * 2 * pi - 1 / 2 * pi) * radius
-    minRotation = sin((t.second + t.microsecond / 1000000)*(1 / 60) * 2 * pi - 1 / 2 * pi) * radius
-    hourRotation = tan((t.second + t.microsecond / 1000000) * (1 / 60) * 2 * pi - 1 / 2 * pi) * radius
+    secRotation = cos((t.second + t.microsecond / 1000000)*(1 / 60) * 2 * pi - 1 / 2 * pi) * secDiscRadius
+    minRotation = sin((t.second + t.microsecond / 1000000)*(1 / 60) * 2 * pi - 1 / 2 * pi) * minDiscRadius
+    hourRotation = tan((t.second + t.microsecond / 1000000) * (1 / 60) * 2 * pi - 1 / 2 * pi) * hourDiscRadius
 
-    drawDigitalWatch(canvas, t)
+#    drawDigitalWatch(canvas, t)
     drawSecDisc(canvas, t, secRotation)
     drawMinDisc(canvas, t, minRotation)
     drawHourDisc(canvas, t, hourRotation, hourText)
@@ -67,7 +70,7 @@ def pointer(canvas):
 
 def drawSecDisc(canvas, t, secRotation):
     sec = t.second #time in sec
-    canvas.create_oval(centrum[0] - secRotation, centrum[1] - radius, centrum[0] + secRotation, centrum[1] + radius, width=2)
+    canvas.create_oval(centrum[0] - secRotation, centrum[1] - secDiscRadius, centrum[0] + secRotation, centrum[1] + secDiscRadius, width=2)
 
     for i in range(1, 61):
         # Small ticks
@@ -75,7 +78,7 @@ def drawSecDisc(canvas, t, secRotation):
         p = i/60
         rad = p * 2 * pi+rotation
         x= secRotation * cos(rad)
-        y=radius * sin(rad)
+        y=secDiscRadius * sin(rad)
         canvas.create_line(centrum[0]+sizeSmallTick*x, centrum [1]+sizeSmallTick*y, x + centrum[0], y + centrum[1], width=1)
 
         # disc text
@@ -85,12 +88,12 @@ def drawSecDisc(canvas, t, secRotation):
         p = i/12
         rad = p * 2 * pi+rotation
         x= secRotation * cos(rad)
-        y=radius * sin(rad)
+        y=secDiscRadius * sin(rad)
         canvas.create_line(centrum[0]+sizeSecondsPoint*x, centrum [1]+sizeSecondsPoint*y, x + centrum[0], y + centrum[1], width=1)
 
 def drawMinDisc(canvas, t, minRotation):
     min = t.minute #time in min
-    canvas.create_oval(centrum[0] - minRotation, centrum[1] - radius, centrum[0] + minRotation, centrum[1] + radius, width=4)
+    canvas.create_oval(centrum[0] - minRotation, centrum[1] - minDiscRadius, centrum[0] + minRotation, centrum[1] + minDiscRadius, width=4)
 
 
     for i in range(1, 61):
@@ -98,7 +101,7 @@ def drawMinDisc(canvas, t, minRotation):
         p = i/60
         rad = p * 2 * pi
         x=minRotation * cos(rad)
-        y=radius * sin(rad)
+        y=minDiscRadius * sin(rad)
         canvas.create_line(centrum[0]+sizeSmallTick*x, centrum [1]+sizeSmallTick*y, x + centrum[0], y + centrum[1], width=2)
         #disc text
         canvas.create_text(x + centrum[0] + x / 10, y + centrum[1] + y / 10, text=60 - i)
@@ -107,36 +110,32 @@ def drawMinDisc(canvas, t, minRotation):
         p = i / 12
         rad = p * 2 * pi + rotation
         x = minRotation * cos(rad)
-        y = radius * sin(rad)
+        y = minDiscRadius * sin(rad)
         canvas.create_line(centrum[0] + sizeSecondsPoint * x, centrum[1] + sizeSecondsPoint * y, x + centrum[0],y + centrum[1], width=2)
 
 def drawHourDisc(canvas, t, hourRotation, hourText):
-    hour = t.hour #time in hours
+    hour = t.second #time in hours
     canvas.create_oval(centrum[0] - hourRotation, centrum[1] - radius, centrum[0] + hourRotation, centrum[1] + radius, width=4)
 
     for i in range(1, 61):
         #Small ticks
-        p = i/60
-        rad = p * 2 * pi
+        rad = i/60 * 2 * pi
         x= hourRotation * cos(rad)
         y=radius * sin(rad)
         canvas.create_line(centrum[0]+sizeSmallTick*x, centrum [1]+sizeSmallTick*y, x + centrum[0], y + centrum[1], width=2)
         # Big ticks
         rotation = hour / 60 * 2 * pi
-        p = i / 12
-        rad = p * 2 * pi + rotation
+        rad = i/12 * 2 * pi + rotation
         x = hourRotation * cos(rad)
         y = radius * sin(rad)
         canvas.create_line(centrum[0] + sizeSecondsPoint * x, centrum[1] + sizeSecondsPoint * y, x + centrum[0],y + centrum[1], width=2)
         # disc text
-
-        if i % 5 == 0:
-            h = i/12
-            rad = h * 2* pi
-            x = hourRotation * cos(rad)
-            y = radius * sin(rad)
-            hourText = hourText + 1
-            canvas.create_text(x + centrum[0] + x / 10, y + centrum[1] + y / 10, text=i)
+    for h in range(1, 13):
+        rad = h/12 * 2* pi + rotation
+        x = hourRotation * cos(rad)
+        y = radius * sin(rad)
+        hourText = hourText + 1
+        canvas.create_text(x + centrum[0] + x / 10, y + centrum[1] + y / 10, text=12-h)
 
 def drawDigitalWatch(canvas, t):
     tNow = t.strftime("%H:%M:%S")
