@@ -114,7 +114,7 @@ def drawMinDisc(canvas, t, minRotation):
         canvas.create_line(centrum[0] + sizeSecondsPoint * x, centrum[1] + sizeSecondsPoint * y, x + centrum[0],y + centrum[1], width=2)
 
 def drawHourDisc(canvas, t, hourRotation, hourText):
-    hour = t.second #time in hours
+    hour = t.hour #time in hours
     canvas.create_oval(centrum[0] - hourRotation, centrum[1] - radius, centrum[0] + hourRotation, centrum[1] + radius, width=4)
 
     for i in range(1, 61):
